@@ -27,15 +27,23 @@ passare da un dispositivo all'altro.
 
 ## Metterla online (GitHub Pages)
 
-Il deploy è già configurato e non serve toccare niente: `.github/workflows/deploy.yml`
-accende Pages da solo alla prima esecuzione (`enablement: true`), poi builda e pubblica
-a ogni push su
+Il deploy è già configurato: `.github/workflows/deploy.yml` builda e pubblica a ogni
+push. Resta **un solo passaggio da fare a mano, una volta sola**:
+
+> Settings → Pages → *Build and deployment* → **Source: GitHub Actions**
+
+(Va fatto per forza da te: creare il sito Pages richiede permessi di admin sul
+repository, che il token dei workflow non ha.)
+
+Poi vai su **Actions** → *Deploy su GitHub Pages* → **Run workflow** per rilanciare il
+deploy, e il sito è online su
 
 ```
 https://lapocremonesi.github.io/fantacalcio/
 ```
 
-Puoi anche rilanciarlo a mano da **Actions** → *Deploy su GitHub Pages* → *Run workflow*.
+Da lì in poi ogni push ripubblica da solo. Il workflow gira i test prima di pubblicare:
+se il modello si rompe, il deploy non parte.
 
 Il workflow gira i test prima di pubblicare: se il modello si rompe, il deploy non parte.
 

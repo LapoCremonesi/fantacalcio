@@ -39,11 +39,10 @@ jobs:
       - name: Build
         run: npm run build
 
-      # enablement: true accende GitHub Pages da solo alla prima esecuzione,
-      # così non serve toccare nulla in Settings
+      # Richiede che Pages sia già attivo con Source = GitHub Actions.
+      # (enablement: true non funziona: creare il sito Pages richiede permessi
+      # di admin che il GITHUB_TOKEN del workflow non ha.)
       - uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
