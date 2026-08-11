@@ -25,6 +25,25 @@ Tutto gira nel browser: nessun server, nessun account. I dati dell'asta stanno n
 `localStorage`, con export/import JSON dalla scheda **Impostazioni** per il backup o per
 passare da un dispositivo all'altro.
 
+## Metterla online (GitHub Pages)
+
+Il deploy è già configurato: `.github/workflows/deploy.yml` builda e pubblica a ogni
+push. Resta **un solo passaggio da fare a mano, una volta sola**:
+
+> Settings → Pages → *Build and deployment* → **Source: GitHub Actions**
+
+Fatto questo, il primo push (o *Run workflow* dalla tab **Actions**) pubblica il sito su
+
+```
+https://lapocremonesi.github.io/fantacalcio/
+```
+
+Il workflow gira i test prima di pubblicare: se il modello si rompe, il deploy non parte.
+
+Nota tecnica: in `vite.config.ts` il `base` è `'./'`, cioè i percorsi degli asset sono
+relativi. Così il sito funziona sia sotto `/fantacalcio/` sia su un dominio custom sia
+aperto da una sottocartella qualsiasi, senza dover cambiare configurazione.
+
 ## Come si usa
 
 1. **Squadre** — con il pulsante **+** aggiungi tutte le squadre della lega. La prima
