@@ -1,121 +1,73 @@
-import { useMemo, useState } from 'react'
-import { AuctionView } from './components/AuctionView'
-import { PlayerDetail } from './components/PlayerDetail'
-import { PlayersView } from './components/PlayersView'
-import { SettingsView } from './components/SettingsView'
-import { TeamDetail } from './components/TeamDetail'
-import { TeamsView } from './components/TeamsView'
-import { CLUBS, PLAYERS } from './data/players'
-import type { Player } from './model/types'
-import { valuta } from './model/valuation'
-import { useStore } from './store'
+import { useEffect, useState } from 'react'
+import { league } from './data/league'
+import { tickerFor } from './lib/autonews'
+import { useRoute } from './lib/route'
+import { playedDays } from './lib/standings'
+import { Masthead, Ticker } from './components/Masthead'
+import { FrontPage } from './components/FrontPage'
+import { ArchivePage, ArticlePage, ResultsPage, StandingsPage, TeamsPage } from './components/Pages'
 
-type Tab = 'squadre' | 'asta' | 'listone' | 'impostazioni'
+type Theme = 'light' | 'dark'
 
-const TABS: { id: Tab; label: string }[] = [
-  { id: 'squadre', label: 'Squadre' },
-  { id: 'asta', label: 'Asta' },
-  { id: 'listone', label: 'Listone' },
-  { id: 'impostazioni', label: 'Impostazioni' },
-]
+function initialTheme(): Theme {
+  try {
+    const saved = localStorage.getItem('eco-theme')
+    if (saved === 'light' || saved === 'dark') return saved
+  } catch {
+    /* storage non disponibile */
+  }
+  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
 
 export default function App() {
-  const { state, actions } = useStore()
-  const [tab, setTab] = useState<Tab>('squadre')
-  const [openTeam, setOpenTeam] = useState<string | null>(null)
-  const [openPlayer, setOpenPlayer] = useState<Player | null>(null)
+  const route = useRoute()
+  const [theme, setTheme] = useState<Theme>(initialTheme)
 
-  const playersById = useMemo(() => new Map(PLAYERS.map((p) => [p.id, p])), [])
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    try {
+      localStorage.setItem('eco-theme', theme)
+    } catch {
+      /* pazienza */
+    }
+  }, [theme])
 
-  const valutazione = useMemo(
-    () =>
-      valuta({
-        players: PLAYERS,
-        teams: state.teams,
-        purchases: state.purchases,
-        settings: state.settings,
-        rules: state.rules,
-        projection: state.projection,
-        avversioneRischio: state.avversioneRischio,
-        concentration: state.concentration,
-      }),
-    [state],
-  )
+  const all = [...league.matchdays].sort((a, b) => a.number - b.number)
+  const played = playedDays(league)
+  const latest = played[played.length - 1] ?? all[0]
+  const day = all.find((d) => d.number === route.day) ?? latest
+
+  if (!day) return <p style={{ padding: 32 }}>Nessuna giornata nei dati.</p>
 
   return (
-    <div className="app">
-      <header className="top">
-        <h1>
-          Asta <span>Fantacalcio</span>
-        </h1>
-        <span className="muted small">
-          {PLAYERS.length} giocatori · listone 2026/27
-        </span>
-        <nav className="tabs">
-          {TABS.map((t) => (
-            <button
-              key={t.id}
-              className={tab === t.id ? 'on' : ''}
-              onClick={() => setTab(t.id)}
-            >
-              {t.label}
-            </button>
-          ))}
-        </nav>
-      </header>
-
-      {tab === 'squadre' && (
-        <TeamsView
-          state={state}
-          actions={actions}
-          playersById={playersById}
-          valutazione={valutazione}
-          onOpenTeam={setOpenTeam}
-        />
-      )}
-
-      {tab === 'asta' && (
-        <AuctionView
-          state={state}
-          valutazione={valutazione}
-          playersById={playersById}
-          onOpenPlayer={setOpenPlayer}
-        />
-      )}
-
-      {tab === 'listone' && (
-        <PlayersView
-          state={state}
-          actions={actions}
-          valutazione={valutazione}
-          clubs={CLUBS}
-          onOpenPlayer={setOpenPlayer}
-        />
-      )}
-
-      {tab === 'impostazioni' && <SettingsView state={state} actions={actions} />}
-
-      {openTeam && (
-        <TeamDetail
-          teamId={openTeam}
-          state={state}
-          actions={actions}
-          valutazione={valutazione}
-          playersById={playersById}
-          onClose={() => setOpenTeam(null)}
-          onOpenPlayer={setOpenPlayer}
-        />
-      )}
-
-      {openPlayer && (
-        <PlayerDetail
-          player={openPlayer}
-          state={state}
-          valutazione={valutazione}
-          playersById={playersById}
-          onClose={() => setOpenPlayer(null)}
-        />
-      )}
+    <div className="paper">
+      <Masthead
+        league={league}
+        day={day}
+        route={route}
+        days={all}
+        theme={theme}
+        onTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+      />
+      <Ticker items={tickerFor(day, league)} />
+      <main>
+        {route.section === 'prima' && <FrontPage league={league} day={day} />}
+        {route.section === 'articolo' && <ArticlePage league={league} day={day} id={route.articleId} />}
+        {route.section === 'classifica' && <StandingsPage league={league} day={day} />}
+        {route.section === 'risultati' && <ResultsPage league={league} day={day} />}
+        {route.section === 'squadre' && <TeamsPage league={league} day={day} />}
+        {route.section === 'archivio' && <ArchivePage league={league} />}
+      </main>
+      <footer className="colophon">
+        <p>
+          <strong>{league.newspaper}</strong> · Direttore responsabile: chi ha vinto l’anno scorso · Redazione: la chat
+          del gruppo
+        </p>
+        <p>
+          Registrazione presso il Tribunale del Bar Sport n. 0/{league.season} · Le opinioni espresse sono
+          volutamente faziose · Nessun presidente è stato maltrattato (troppo) durante la stesura di questo numero.
+        </p>
+      </footer>
     </div>
   )
 }
