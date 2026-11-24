@@ -79,6 +79,7 @@ export function ArticlePage({ league, day, id }: { league: League; day: Matchday
 /* ─────────────────────────────── Classifica ─────────────────────────────── */
 
 function lineColor(t: Team): string {
+  if (t.chartColor) return t.chartColor
   const lum = (hex: string) => {
     const h = hex.replace('#', '')
     const [r, g, b] = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16) / 255)

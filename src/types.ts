@@ -18,6 +18,8 @@ export interface Team {
   manager?: string
   /** Colori sociali: [primario, secondario] */
   colors: [string, string]
+  /** Colore nei grafici, se quelli sociali si confondono con altre squadre */
+  chartColor?: string
   /** Motto o soprannome, facoltativo */
   motto?: string
 }

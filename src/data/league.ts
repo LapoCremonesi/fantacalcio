@@ -15,12 +15,12 @@ export const league: League = {
 
   // Colori presi dalle maglie negli screenshot
   teams: [
-    { id: 'den', name: 'AC denti alla madonna', short: 'DEN', colors: ['#161616', '#c8102e'] },
-    { id: 'sbu', name: 'As Sburrao', short: 'SBU', colors: ['#272152', '#8f7ad6'] },
-    { id: 'fag', name: 'fagioli united', short: 'FAG', colors: ['#6b2fa0', '#e8388a'] },
-    { id: 'tur', name: 'F C Turbo Bamba', short: 'TUR', colors: ['#f2c230', '#1a1a1a'] },
-    { id: 'mun', name: 'FC MUNDO', short: 'MUN', colors: ['#4b2382', '#2e9e5b'] },
-    { id: 'foc', name: 'Fo-Caccia', short: 'FOC', colors: ['#f4a9c0', '#2b3a8c'] },
+    { id: 'den', name: 'AC denti alla madonna', short: 'DEN', colors: ['#161616', '#c8102e'], chartColor: '#c8102e' },
+    { id: 'sbu', name: 'As Sburrao', short: 'SBU', colors: ['#272152', '#8f7ad6'], chartColor: '#2f5bd3' },
+    { id: 'fag', name: 'fagioli united', short: 'FAG', colors: ['#6b2fa0', '#e8388a'], chartColor: '#7b3fa0' },
+    { id: 'tur', name: 'F C Turbo Bamba', short: 'TUR', colors: ['#f2c230', '#1a1a1a'], chartColor: '#d99a00' },
+    { id: 'mun', name: 'FC MUNDO', short: 'MUN', colors: ['#4b2382', '#2e9e5b'], chartColor: '#2e8b57' },
+    { id: 'foc', name: 'Fo-Caccia', short: 'FOC', colors: ['#f4a9c0', '#2b3a8c'], chartColor: '#e0609a' },
   ],
 
   matchdays: [
