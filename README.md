@@ -4,8 +4,8 @@ Il quotidiano della lega: ogni giornata diventa una prima pagina, con risultati,
 classifica, pagelle ai presidenti, il migliore e il peggiore, i pettegolezzi della chat
 e le voci di mercato. Semi-serio, volutamente fazioso.
 
-> **Stato attuale:** è pronta la UI. I dati in `src/data/league.ts` sono **segnaposto
-> inventati** (8 squadre, 12 giornate) e vanno sostituiti con quelli veri.
+> **Stato attuale:** 6 squadre, giornate inserite a mano in `src/data/league.ts`
+> a partire dagli screenshot delle formazioni.
 
 ## Avvio
 
@@ -34,7 +34,7 @@ Tutto parte da un unico oggetto `League` (tipi in `src/types.ts`):
 
 - **squadre**: nome, sigla, presidente, colori sociali, motto;
 - **giornate**: data e risultati in **fantapunti**. I gol si calcolano da soli
-  (soglia 66, +1 gol ogni 6 punti, configurabile) ma si possono anche indicare a mano;
+  (in questa lega: 1 gol a 66 punti, poi +1 ogni 4; configurabile) ma si possono anche indicare a mano;
 - **contenuti facoltativi** per giornata: articoli, ultim'ora, pagelle, top/flop, la frase.
 
 Classifica, forma, variazioni di posizione e statistiche sono **calcolate** dai risultati.

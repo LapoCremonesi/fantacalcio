@@ -2,7 +2,6 @@ import type { Article, League, Matchday, PlayerSpotlight, Team } from '../types'
 import { articlesFor, fmt } from '../lib/autonews'
 import { href } from '../lib/route'
 import { dayStats, standings, teamMap } from '../lib/standings'
-import { nextFixtures } from '../data/league'
 import { Badge } from './Badge'
 import { Fixture, Scoreline, StandingsTable } from './Tables'
 
@@ -106,7 +105,7 @@ export function FrontPage({ league, day }: Props) {
   const brevi = rest.filter((a) => a.kind === 'breve')
   const stats = dayStats(day, league)
   const table = standings(league, day.number)
-  const fixtures = nextFixtures[day.number + 1]
+  const fixtures = league.fixtures?.[day.number + 1]
 
   if (!day.results.length) {
     return (
@@ -114,10 +113,10 @@ export function FrontPage({ league, day }: Props) {
         <p className="kicker">Giornata {day.number}</p>
         <h2>Si gioca ancora</h2>
         <p>Le rotative sono ferme: il giornale esce a risultati acquisiti. Torna lunedì.</p>
-        {nextFixtures[day.number] && (
+        {league.fixtures?.[day.number] && (
           <div className="box">
             <h4 className="box-title">In programma</h4>
-            {nextFixtures[day.number].map(([h, a]) => (
+            {league.fixtures[day.number].map(([h, a]) => (
               <Fixture key={h + a} home={h} away={a} teams={teams} />
             ))}
           </div>
@@ -269,7 +268,7 @@ export function FrontPage({ league, day }: Props) {
                     <span className={`grade-num ${gradeClass(g.grade)}`}>{fmt(g.grade)}</span>
                     <div>
                       <p className="grade-who">
-                        {t.manager} <small>{t.name}</small>
+                        {t.manager ?? t.name} {t.manager && <small>{t.name}</small>}
                       </p>
                       <p className="grade-comment">{g.comment}</p>
                     </div>

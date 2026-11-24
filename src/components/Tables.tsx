@@ -64,7 +64,7 @@ export function StandingsTable({ rows, compact = false }: { rows: Row[]; compact
                 <Badge team={r.team} size={compact ? 16 : 20} />
                 <span>
                   {r.team.name}
-                  {!compact && <small className="manager">{r.team.manager}</small>}
+                  {!compact && r.team.manager && <small className="manager">{r.team.manager}</small>}
                 </span>
               </span>
             </td>
@@ -115,6 +115,7 @@ export function Scoreline({ m, teams }: { m: ScoredMatch; teams: Map<string, Tea
       </span>
       <span className="sl-fp">
         {fmt(m.homePoints)} <span>·</span> {fmt(m.awayPoints)}
+        {m.note && <em className="sl-note">{m.note}</em>}
       </span>
     </div>
   )

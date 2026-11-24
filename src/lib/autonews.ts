@@ -43,7 +43,7 @@ function matchArticle(m: ScoredMatch, teams: Map<string, Team>, day: Matchday, i
       author: 'Red. Sport',
       teams: [m.home, m.away],
       body: [
-        `Finisce ${m.homeGoals}-${m.awayGoals} con ${fmt(m.homePoints)} a ${fmt(m.awayPoints)}. ${h.manager} e ${a.manager} si stringono la mano, ma nessuno dei due è contento.`,
+        `Finisce ${m.homeGoals}-${m.awayGoals} con ${fmt(m.homePoints)} a ${fmt(m.awayPoints)}. ${h.manager ?? h.name} e ${a.manager ?? a.name} si stringono la mano, ma nessuno dei due è contento.`,
       ],
     }
   }
@@ -59,7 +59,7 @@ function matchArticle(m: ScoredMatch, teams: Map<string, Team>, day: Matchday, i
         ? pick([`${w.name} travolge ${l.name}`, `Lezione di ${w.name}: ${l.name} rimandato a settembre`], seed)
         : gap <= 1.5
           ? pick([`${w.name} di un soffio su ${l.name}`, `Mezzo punto d’oro: ${w.name} beffa ${l.name}`], seed)
-          : pick([`${w.name} supera ${l.name} ${score}`, `${w.manager} sorride, ${l.manager} meno`], seed),
+          : pick([`${w.name} supera ${l.name} ${score}`, `${w.manager ?? w.name} sorride, ${l.manager ?? l.name} meno`], seed),
     author: 'Red. Sport',
     teams: [w.id, l.id],
     body: [`${w.name} batte ${l.name} ${score}: ${fmt(wp)} contro ${fmt(lp)} fantapunti.`],
@@ -94,7 +94,7 @@ export function articlesFor(day: Matchday, league: League): Article[] {
     teams: s.rout ? [s.rout.home, s.rout.away] : [],
     body: [
       `${s.totalGoals} gol in ${s.matches.length} partite e una media di ${fmt(s.avgPoints)} fantapunti a squadra: questo il bilancio della ${day.number}ª giornata.`,
-      `In testa c’è ${leader.team.name} di ${leader.team.manager} con ${leader.points} punti, ${table[1] ? `${leader.points - table[1].points} in più di ${table[1].team.name}` : 'da solo'}. In fondo, ${table[table.length - 1].team.name} continua a cercare sé stesso.`,
+      `In testa c’è ${leader.team.name}${leader.team.manager ? ` di ${leader.team.manager}` : ''} con ${leader.points} punti, ${table[1] ? `${leader.points - table[1].points} in più di ${table[1].team.name}` : 'da solo'}. In fondo, ${table[table.length - 1].team.name} continua a cercare sé stesso.`,
     ],
   }
   return [lead, ...s.matches.map((m, i) => matchArticle(m, teams, day, i))]

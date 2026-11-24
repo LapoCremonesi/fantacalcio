@@ -275,7 +275,7 @@ export function TeamsPage({ league, day }: { league: League; day: Matchday }) {
                 <Badge team={r.team} size={52} />
                 <div>
                   <h3>{r.team.name}</h3>
-                  <p className="team-manager">Presidente: {r.team.manager}</p>
+                  {r.team.manager && <p className="team-manager">Presidente: {r.team.manager}</p>}
                 </div>
                 <span className="team-pos">
                   {r.pos}°
@@ -362,7 +362,8 @@ export function ArchivePage({ league }: { league: League }) {
             <a key={d.number} className="archive-card" href={href({ section: 'prima', day: d.number })}>
               <span className="archive-mast">{league.newspaper}</span>
               <span className="archive-meta">
-                N. {d.number} · {shortDate(d.date)}
+                N. {d.number}
+                {d.date && ` · ${shortDate(d.date)}`}
               </span>
               <span className="archive-title">{lead?.title ?? `${d.number}ª giornata`}</span>
             </a>

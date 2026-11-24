@@ -1551,3 +1551,12 @@ p {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0 24px;
 }
+
+.sl-note {
+  display: block;
+  font-style: normal;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 2px;
+}

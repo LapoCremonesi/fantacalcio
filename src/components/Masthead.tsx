@@ -46,7 +46,7 @@ export function Masthead({ league, day, route, days, theme, onTheme }: Props) {
         <span>
           Anno I · N. {day.number} · Stagione {league.season}
         </span>
-        <span className="mast-date">{longDate(editionDate(day.date))}</span>
+        <span className="mast-date">{day.date ? longDate(editionDate(day.date)) : `${day.number}ª giornata`}</span>
         <span className="mast-right">
           {PRICES[day.number % PRICES.length]}
           <button className="theme-btn" onClick={onTheme} title="Cambia edizione">
@@ -66,7 +66,8 @@ export function Masthead({ league, day, route, days, theme, onTheme }: Props) {
         </span>
       </a>
       <p className="mast-tagline">
-        {league.tagline} · {league.name}
+        {league.tagline}
+        {league.name && ` · ${league.name}`}
       </p>
 
       <nav className="mast-nav" aria-label="Sezioni">

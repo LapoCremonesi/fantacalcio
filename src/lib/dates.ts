@@ -10,6 +10,7 @@ export function longDate(d: Date): string {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-export function shortDate(iso: string): string {
+export function shortDate(iso?: string): string {
+  if (!iso) return ''
   return new Date(iso + 'T12:00:00').toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })
 }

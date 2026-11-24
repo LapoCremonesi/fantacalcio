@@ -14,8 +14,8 @@ export interface Team {
   name: string
   /** Sigla di 3 lettere per tabelle e stemmi */
   short: string
-  /** Il presidente/allenatore (la persona reale del gruppo) */
-  manager: string
+  /** Il presidente/allenatore (la persona reale del gruppo), facoltativo */
+  manager?: string
   /** Colori sociali: [primario, secondario] */
   colors: [string, string]
   /** Motto o soprannome, facoltativo */
@@ -28,9 +28,11 @@ export interface MatchResult {
   /** Fantapunti totali (es. 72.5) */
   homePoints: number
   awayPoints: number
-  /** Gol: se assenti si calcolano dai fantapunti (soglia 66, +1 ogni 6) */
+  /** Gol: se assenti si calcolano dai fantapunti (vedi League.goals) */
   homeGoals?: number
   awayGoals?: number
+  /** Nota sotto il risultato, es. "Fo-Caccia non schierata" */
+  note?: string
 }
 
 export type ArticleKind =
@@ -75,8 +77,8 @@ export interface PlayerSpotlight {
 
 export interface Matchday {
   number: number
-  /** Data ISO della giornata di Serie A, es. "2026-11-23" */
-  date: string
+  /** Data ISO della giornata di Serie A, es. "2026-11-23" (facoltativa) */
+  date?: string
   results: MatchResult[]
   articles?: Article[]
   /** Pagelle ai presidenti */
@@ -90,8 +92,8 @@ export interface Matchday {
 }
 
 export interface League {
-  /** Nome della lega */
-  name: string
+  /** Nome della lega (facoltativo) */
+  name?: string
   /** Nome della testata */
   newspaper: string
   /** Sottotitolo della testata */
@@ -99,6 +101,8 @@ export interface League {
   season: string
   teams: Team[]
   matchdays: Matchday[]
+  /** Accoppiamenti delle giornate future, per il box "Prossimo turno" */
+  fixtures?: Record<number, [TeamId, TeamId][]>
   /** Punti in classifica: vittoria / pareggio / sconfitta */
   pointsFor?: { win: number; draw: number; loss: number }
   /** Conversione fantapunti → gol */
